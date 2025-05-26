@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.AppHost", "HorselessRepro.PythonOrchestrator.AppHost\HorselessRepro.PythonOrchestrator.AppHost.csproj", "{59A83430-9C72-4965-B88E-90C10062A346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.ServiceDefaults", "HorselessRepro.PythonOrchestrator.ServiceDefaults\HorselessRepro.PythonOrchestrator.ServiceDefaults.csproj", "{265F8A49-6C77-494E-6D5B-D0822BDA1A8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.ApiService", "HorselessRepro.PythonOrchestrator.ApiService\HorselessRepro.PythonOrchestrator.ApiService.csproj", "{FDBF6EFA-D72D-9532-FF05-91C7B0EDBD61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Web", "HorselessRepro.PythonOrchestrator.Web\HorselessRepro.PythonOrchestrator.Web.csproj", "{8D1D3000-107B-3808-5606-B0F407E0CBE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Tests", "HorselessRepro.PythonOrchestrator.Tests\HorselessRepro.PythonOrchestrator.Tests.csproj", "{E41A44B7-EC18-D490-84C1-3646615A5290}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59A83430-9C72-4965-B88E-90C10062A346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A83430-9C72-4965-B88E-90C10062A346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A83430-9C72-4965-B88E-90C10062A346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A83430-9C72-4965-B88E-90C10062A346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265F8A49-6C77-494E-6D5B-D0822BDA1A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265F8A49-6C77-494E-6D5B-D0822BDA1A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265F8A49-6C77-494E-6D5B-D0822BDA1A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265F8A49-6C77-494E-6D5B-D0822BDA1A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBF6EFA-D72D-9532-FF05-91C7B0EDBD61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBF6EFA-D72D-9532-FF05-91C7B0EDBD61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBF6EFA-D72D-9532-FF05-91C7B0EDBD61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBF6EFA-D72D-9532-FF05-91C7B0EDBD61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1D3000-107B-3808-5606-B0F407E0CBE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1D3000-107B-3808-5606-B0F407E0CBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1D3000-107B-3808-5606-B0F407E0CBE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1D3000-107B-3808-5606-B0F407E0CBE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41A44B7-EC18-D490-84C1-3646615A5290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41A44B7-EC18-D490-84C1-3646615A5290}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41A44B7-EC18-D490-84C1-3646615A5290}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41A44B7-EC18-D490-84C1-3646615A5290}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F00C9B0-7ABB-41E2-AF64-D2135DE3BA1E}
+	EndGlobalSection
+EndGlobal
