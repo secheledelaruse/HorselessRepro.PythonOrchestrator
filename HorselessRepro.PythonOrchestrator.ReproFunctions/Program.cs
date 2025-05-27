@@ -11,5 +11,5 @@ builder.ConfigureFunctionsWebApplication();
 // builder.Services
 //     .AddApplicationInsightsTelemetryWorkerService()
 //     .ConfigureFunctionsApplicationInsights();
-builder.AddAzureBlobClient("blobs");
+builder.AddAzureBlobClient("AzureWebJobsStorage");
 builder.Build().Run();

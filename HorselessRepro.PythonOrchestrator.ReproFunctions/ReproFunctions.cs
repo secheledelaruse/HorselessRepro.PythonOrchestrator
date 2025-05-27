@@ -25,7 +25,7 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
 
         // add a timer trigger with queue storage output
         [Function(nameof(TimerTriggered))]
-        public async Task TimerTriggered([TimerTrigger("0 */5 * * * *")] TimerInfo myTimer)
+        public async Task TimerTriggered([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             var queueMessage = $"blob updated at: {DateTime.Now}";
