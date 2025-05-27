@@ -1,7 +1,8 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Queues;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker; 
 using Microsoft.Extensions.Logging;
 
 namespace HorselessRepro.PythonOrchestrator.ReproFunctions
@@ -10,10 +11,12 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
     {
         private readonly ILogger<ReproFunctions> _logger;
         private BlobServiceClient _blobClient;
-        public ReproFunctions(ILogger<ReproFunctions> logger, BlobServiceClient client)
+        private QueueServiceClient _queueClient;
+        public ReproFunctions(ILogger<ReproFunctions> logger, QueueServiceClient queueClient, BlobServiceClient blobClient)
         {
             _logger = logger;
-            _blobClient = client;
+            _blobClient = blobClient;
+            _queueClient = queueClient;
         }
 
         [Function(nameof(HttpTriggered))]
@@ -25,7 +28,8 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
 
         // add a timer trigger with queue storage output
         [Function(nameof(TimerTriggered))]
-        public async Task TimerTriggered([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer)
+        [QueueOutput("myqueue-items")]
+        public async Task<string> TimerTriggered([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             var queueMessage = $"blob updated at: {DateTime.Now}";
@@ -39,6 +43,24 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
             {
                 await blobClient.UploadAsync(stream, overwrite: true);
             }
+
+            return queueMessage;
         }
+
+        // add a storage queue triggered function that reads a string from the queue
+        //[Function(nameof(QueueTriggered))]
+        //public async Task QueueTriggered([QueueTrigger("reproqueue")] string queueMessage, FunctionContext context)
+        //{
+        //    _logger.LogInformation($"C# Queue trigger function processed: {queueMessage}");
+        //    var blobClient = _blobClient.GetBlobContainerClient("reprocontainer").GetBlobClient("reproblob.txt");
+            
+        //    // Read the blob content
+        //    var response = await blobClient.DownloadAsync();
+        //    using (var reader = new StreamReader(response.Value.Content))
+        //    {
+        //        var content = await reader.ReadToEndAsync();
+        //        _logger.LogInformation($"Blob content: {content}");
+        //    }
+        //}
     }
 }
