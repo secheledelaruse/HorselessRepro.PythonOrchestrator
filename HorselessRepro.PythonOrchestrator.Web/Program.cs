@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
+builder.AddAzureBlobClient("blobs");
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

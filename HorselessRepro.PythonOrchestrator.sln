@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.AppHost", "HorselessRepro.PythonOrchestrator.AppHost\HorselessRepro.PythonOrchestrator.AppHost.csproj", "{59A83430-9C72-4965-B88E-90C10062A346}"
 EndProject
@@ -11,6 +11,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Web", "HorselessRepro.PythonOrchestrator.Web\HorselessRepro.PythonOrchestrator.Web.csproj", "{8D1D3000-107B-3808-5606-B0F407E0CBE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Tests", "HorselessRepro.PythonOrchestrator.Tests\HorselessRepro.PythonOrchestrator.Tests.csproj", "{E41A44B7-EC18-D490-84C1-3646615A5290}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.ReproFunctions", "HorselessRepro.PythonOrchestrator.ReproFunctions\HorselessRepro.PythonOrchestrator.ReproFunctions.csproj", "{249EE21D-CFC0-4BE8-B946-8AC277997FA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +45,10 @@ Global
 		{E41A44B7-EC18-D490-84C1-3646615A5290}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E41A44B7-EC18-D490-84C1-3646615A5290}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E41A44B7-EC18-D490-84C1-3646615A5290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

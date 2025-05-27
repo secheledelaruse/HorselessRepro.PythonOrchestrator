@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "HorselessRepro.PythonOrchestrator.ReproFunctions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7138",
+      "launchBrowser": false
+    }
+  }
+}
