@@ -96,6 +96,7 @@ var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonO
                         .WithReference(cosmosConnection)
                         .WithReference(cosmos)
                         .WithEnvironment("AzureWebjobsStorage", storageUri)
+                        .WithEnvironment("cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
                         .WithHostStorage(storage)
                         .WaitFor(storage) 
                         .WaitFor(initPod);
@@ -105,6 +106,7 @@ var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_A
 var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro.PythonOrchestrator.ReproFunctions.Python")
     .WithReference(blobs) 
     .WithEnvironment("AzureWebJobsStorage", storageUri)
+    .WithEnvironment("cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
     // .WithReference(storageConnectionString)
     .WaitFor(blobs)
     .WaitFor(initPod);

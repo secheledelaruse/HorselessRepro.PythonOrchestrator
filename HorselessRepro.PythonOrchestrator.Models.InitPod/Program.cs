@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
 
             builder.AddServiceDefaults();
             builder.AddAzureCosmosClient(connectionName: "cosmos-db");
+            builder.AddAzureBlobClient("AzureWebJobsStorage");
             Console.WriteLine("Hello, World!");
 
             var host = builder.Build();
@@ -30,8 +32,14 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
 
                 try
                 {
-                    var cosmosClient = scope.ServiceProvider.GetRequiredService<CosmosClient>();
+                    // ensure the required blob container
+                    var blobClient = scope.ServiceProvider.GetRequiredService<BlobServiceClient>();
+                    var containerClient = blobClient.GetBlobContainerClient("reprocontainer");
+                    
+                    await containerClient.CreateIfNotExistsAsync();
 
+                    // ensure the required cosmos database and container
+                    var cosmosClient = scope.ServiceProvider.GetRequiredService<CosmosClient>();
                     var createdDatabase = await cosmosClient.CreateDatabaseIfNotExistsAsync("reprodb");
 
                     var leasedResourceContainer = createdDatabase.Database.CreateContainerIfNotExistsAsync(new ContainerProperties()

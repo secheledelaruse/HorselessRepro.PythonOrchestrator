@@ -7,7 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>  
-		<PackageReference Include="Aspire.Microsoft.Azure.Cosmos" /> 
+		<PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
+		<PackageReference Include="Aspire.Azure.Storage.Blobs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ServiceDefaults\HorselessRepro.PythonOrchestrator.ServiceDefaults.csproj" />
