@@ -1,7 +1,10 @@
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 var builder = FunctionsApplication.CreateBuilder(args);
+// add local.settings.json to configuration
+builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
 builder.AddServiceDefaults();
 

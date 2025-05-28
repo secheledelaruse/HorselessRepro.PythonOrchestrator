@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Queues;
+using HorselessRepro.PythonOrchestrator.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker; 
@@ -17,6 +18,24 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
             _logger = logger;
             _blobClient = blobClient;
             _queueClient = queueClient;
+        }
+
+        // cosmosdb triggered function
+        [Function(nameof(CosmosDbTriggered))]
+        public void CosmosDbTriggered([CosmosDBTrigger(databaseName: "reprodb", 
+            containerName: "entries",
+            LeaseContainerName = "reprodb-leases", 
+            CreateLeaseContainerIfNotExists = true,
+            Connection = "cosmosdb")] IReadOnlyList<ToDoItem> documents, FunctionContext context)
+        {
+            if (documents != null && documents.Count > 0)
+            {
+                _logger.LogInformation($"C# CosmosDB trigger function processed {documents.Count} documents.");
+                foreach (var doc in documents)
+                {
+                    _logger.LogInformation($"Document Id: {doc.Id}, Content: {doc.Description}");
+                }
+            }
         }
 
         [Function(nameof(HttpTriggered))]

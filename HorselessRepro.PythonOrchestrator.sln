@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Models", "HorselessRepro.PythonOrchestrator.Models\HorselessRepro.PythonOrchestrator.Models.csproj", "{73C46AF2-E781-40F8-BD8A-50C553FD3214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorselessRepro.PythonOrchestrator.Models.InitPod", "HorselessRepro.PythonOrchestrator.Models.InitPod\HorselessRepro.PythonOrchestrator.Models.InitPod.csproj", "{90193375-BE58-4C14-AD42-849D25BD3C5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,14 @@ Global
 		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{249EE21D-CFC0-4BE8-B946-8AC277997FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73C46AF2-E781-40F8-BD8A-50C553FD3214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C46AF2-E781-40F8-BD8A-50C553FD3214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C46AF2-E781-40F8-BD8A-50C553FD3214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C46AF2-E781-40F8-BD8A-50C553FD3214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90193375-BE58-4C14-AD42-849D25BD3C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90193375-BE58-4C14-AD42-849D25BD3C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90193375-BE58-4C14-AD42-849D25BD3C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90193375-BE58-4C14-AD42-849D25BD3C5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

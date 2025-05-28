@@ -8,7 +8,7 @@ builder.AddServiceDefaults();
 
 builder.AddAzureBlobClient("blobs");
 builder.AddAzureQueueClient("AzureWebJobsStorage");
-
+builder.AddAzureCosmosClient(connectionName: "cosmos-db");
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

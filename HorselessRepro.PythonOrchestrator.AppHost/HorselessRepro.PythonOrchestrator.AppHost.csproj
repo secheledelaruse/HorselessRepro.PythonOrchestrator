@@ -10,11 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ApiService\HorselessRepro.PythonOrchestrator.ApiService.csproj" />
+    <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Models.InitPod\HorselessRepro.PythonOrchestrator.Models.InitPod.csproj" />
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ReproFunctions\HorselessRepro.PythonOrchestrator.ReproFunctions.csproj" />
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Web\HorselessRepro.PythonOrchestrator.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.Azure.CosmosDB" />
     <PackageReference Include="Aspire.Hosting.Azure.Functions" />
     <PackageReference Include="Aspire.Hosting.Azure.Storage" />
   </ItemGroup>
