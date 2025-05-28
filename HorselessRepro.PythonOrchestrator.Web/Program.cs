@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.AddAzureBlobClient("blobs");
+builder.AddAzureQueueClient("AzureWebJobsStorage");
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

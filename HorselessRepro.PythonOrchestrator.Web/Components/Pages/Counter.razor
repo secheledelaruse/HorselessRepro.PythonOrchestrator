@@ -1,5 +1,7 @@
 ﻿@page "/counter"
+@using System.Text
 @inject BlobServiceClient blobClient
+@inject QueueServiceClient queueServiceClient
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
@@ -8,6 +10,8 @@
 
 <p role="status">Current count: @currentCount</p>
 <p role="status">Current Blob Message: @currentBlobMessage</p>
+<p role="status">Passed Through Blob Message via Python queue function: @reflectedBlobMessage</p>
+
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 <br />
 <label>
@@ -19,6 +23,8 @@
 @code {
     private int currentCount = 0;
     private string currentBlobMessage = string.Empty;
+    private string reflectedBlobMessage = "This message is passed through the Python queue function.";
+
     private Timer? timer;
     private int timerInterval = 2000; // 2 seconds
 
@@ -41,6 +47,7 @@
             await InvokeAsync(async () =>
             {
                 await RenderBlobMessage();
+                await RenderQueueMessage();
                 StateHasChanged();
             });
         }, null, timerInterval, timerInterval);
@@ -65,6 +72,38 @@
         {
             currentBlobMessage = "Blob does not exist.";
         }
+    }
+
+    protected async Task RenderQueueMessage()
+    {
+        var queueClient = queueServiceClient.GetQueueClient("passthrough");
+        if (await queueClient.ExistsAsync())
+        {
+            var messages = await queueClient.ReceiveMessagesAsync(1);
+            if (messages.Value.Length > 0)
+            {
+                string base64Message = messages.Value[0].MessageText;
+                try
+                {
+                    byte[] data = Convert.FromBase64String(base64Message);
+                    reflectedBlobMessage = Encoding.UTF8.GetString(data);
+                }
+                catch (FormatException)
+                {
+                    // Not a Base64 string, use as-is
+                    reflectedBlobMessage = base64Message;
+                }
+            }
+            else
+            {
+                reflectedBlobMessage = "No messages in the queue.";
+            }
+        }
+        else
+        {
+            reflectedBlobMessage = "Queue does not exist.";
+        }
+
     }
 
     public void Dispose()

@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Aspire.Azure.Storage.Blobs" />
+		<PackageReference Include="Aspire.Azure.Storage.Queues" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Queues" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ServiceDefaults\HorselessRepro.PythonOrchestrator.ServiceDefaults.csproj" />
