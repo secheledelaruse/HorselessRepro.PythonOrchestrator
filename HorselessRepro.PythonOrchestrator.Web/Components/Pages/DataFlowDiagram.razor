@@ -5,6 +5,7 @@
 @inject BlobServiceClient blobClient
 @inject QueueServiceClient queueServiceClient
 @inject CosmosClient cosmosClient
+@inject WeatherApiClient WeatherApiClient
 
 @rendermode InteractiveServer
 
@@ -125,25 +126,7 @@
     {
         try
         {
-            var database = cosmosClient.GetDatabase("reprodb");
-            var container = database.GetContainer("entries");
-
-            var query = "SELECT TOP 1 c.id, c.Description FROM c ORDER BY c._ts DESC";
-            var iterator = container.GetItemQueryIterator<ToDoItem>(query);
-
-            var sb = new StringBuilder();
-            int count = 0;
-            while (iterator.HasMoreResults)
-            {
-                var response = await iterator.ReadNextAsync();
-                foreach (var item in response)
-                {
-                    sb.AppendLine($"Id: {item.Id}, Desc: {item.Description}");
-                    count++;
-                }
-            }
-
-            return count > 0 ? sb.ToString() : "No ToDoItems found in CosmosDB.";
+            return await WeatherApiClient.GetCosmosDbMessageAsync();
         }
         catch (Exception ex)
         {
@@ -158,55 +141,26 @@
 
     protected async Task<string> GetBlobMessageAsync()
     {
-        var currentBlobMessage = string.Empty;
-        var containerClient = this.blobClient.GetBlobContainerClient("reprocontainer");
-        var blobClient = containerClient.GetBlobClient("reproblob.txt");
-
-        if (await blobClient.ExistsAsync())
+        try
         {
-            var response = await blobClient.DownloadContentAsync();
-            currentBlobMessage = response.Value.Content.ToString();
+            return await WeatherApiClient.GetBlobMessageAsync();
         }
-        else
+        catch (Exception ex)
         {
-            currentBlobMessage = "Blob does not exist.";
+            return $"Error reading Blob: {ex.Message}";
         }
-
-        return currentBlobMessage;
     }
 
     protected async Task<string> GetQueueItemsAsync()
     {
-        var reflectedBlobMessage = "This message is passed through the Python queue function.";
-        var queueClient = queueServiceClient.GetQueueClient("myqueue-items");
-        if (await queueClient.ExistsAsync())
+        try
         {
-            var messages = await queueClient.ReceiveMessagesAsync(1);
-            if (messages.Value.Length > 0)
-            {
-                string base64Message = messages.Value[0].MessageText;
-                try
-                {
-                    byte[] data = Convert.FromBase64String(base64Message);
-                    reflectedBlobMessage = Encoding.UTF8.GetString(data);
-                }
-                catch (FormatException)
-                {
-                    // Not a Base64 string, use as-is
-                    reflectedBlobMessage = base64Message;
-                }
-            }
-            else
-            {
-                reflectedBlobMessage = "No messages in the queue.";
-            }
+            return await WeatherApiClient.GetQueueItemsAsync();
         }
-        else
+        catch (Exception ex)
         {
-            reflectedBlobMessage = "Queue does not exist.";
+            return $"Error reading Queue: {ex.Message}";
         }
-
-        return reflectedBlobMessage;
     }
 
     private void ZoomIn()

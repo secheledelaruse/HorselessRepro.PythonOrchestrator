@@ -4,6 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
+builder.AddAzureBlobClient("blobs");
+builder.AddAzureQueueClient("AzureWebJobsStorage");
+builder.AddAzureCosmosClient(connectionName: "cosmos-db");
 
 builder.Services.AddScoped<IStorageLayer, StorageLayer>();
 
