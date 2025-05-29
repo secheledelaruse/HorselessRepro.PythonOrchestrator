@@ -47,8 +47,13 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
                         PartitionKeyPath = "/PartitionKey",
                         Id = "entries"
                     });
-                     
 
+
+                    var pythonEntriesContainer = createdDatabase.Database.CreateContainerIfNotExistsAsync(new ContainerProperties()
+                    {
+                        PartitionKeyPath = "/PartitionKey",
+                        Id = "pyentries"
+                    });
                 }
                 catch (Exception e)
                 {

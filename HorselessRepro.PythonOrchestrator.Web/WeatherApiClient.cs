@@ -32,9 +32,14 @@ public class WeatherApiClient(HttpClient httpClient)
         return await httpClient.GetStringAsync("/getQueueItems", cancellationToken);
     }
 
-    public async Task<string> GetCosmosDbMessageAsync(CancellationToken cancellationToken = default)
+    public async Task<string> GetLocalHostCosmosDbMessages(CancellationToken cancellationToken = default)
     {
-        return await httpClient.GetStringAsync("/getCosmosDbMessage", cancellationToken);
+        return await httpClient.GetStringAsync("/getCosmosDbMessage?containerName=entries", cancellationToken);
+    }
+
+    public async Task<string> GetPythonFuncsMessages(CancellationToken cancellationToken = default)
+    {
+        return await httpClient.GetStringAsync("/getCosmosDbMessage?containerName=pyentries", cancellationToken);
     }
 }
 

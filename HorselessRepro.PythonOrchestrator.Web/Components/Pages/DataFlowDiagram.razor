@@ -126,7 +126,7 @@
     {
         try
         {
-            return await WeatherApiClient.GetCosmosDbMessageAsync();
+            return await WeatherApiClient.GetLocalHostCosmosDbMessages();
         }
         catch (Exception ex)
         {

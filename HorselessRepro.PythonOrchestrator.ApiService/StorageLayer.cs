@@ -9,7 +9,7 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
     public interface IStorageLayer
     {
         Task<string> GetQueueItemsAsync();
-        Task<string> GetCosmosDbMessageAsync();
+        Task<string> GetCosmosDbMessageAsync(string containerName);
         Task<string> GetBlobMessageAsync();
     }
     public class StorageLayer : IStorageLayer
@@ -77,7 +77,7 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
             return currentBlobMessage;
         }
 
-        public async Task<string> GetCosmosDbMessageAsync()
+        public async Task<string> GetCosmosDbMessageAsync(string containerName = "entries")
         {
             try
             {

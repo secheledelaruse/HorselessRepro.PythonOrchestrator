@@ -69,7 +69,11 @@ var cosmos = builder.AddAzureCosmosDB("cosmosresource")
     //})
     ;
 var db = cosmos.AddCosmosDatabase("reprodb");
+// Add a container for entries
 var container = db.AddContainer("entries", "/PartitionKey");
+
+// Add a container for Python functions entries
+var pythonFuncsContainer = db.AddContainer("pyentries", "/PartitionKey");
 
 #pragma warning restore ASPIRECOSMOSDB001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 

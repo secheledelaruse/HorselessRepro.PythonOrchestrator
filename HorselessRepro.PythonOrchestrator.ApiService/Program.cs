@@ -57,9 +57,11 @@ app.MapGet("/getQueueItems", async (IStorageLayer storage) =>
 })
 .WithName("GetQueueItems");
 
-app.MapGet("/getCosmosDbMessage", async (IStorageLayer storage) =>
+
+app.MapGet("/getCosmosDbMessage", async (IStorageLayer storage, string? containerName) =>
 {
-    var result = await storage.GetCosmosDbMessageAsync();
+    // Use the provided containerName or default to "entries" if not specified
+    var result = await storage.GetCosmosDbMessageAsync(containerName ?? "entries");
     return Results.Ok(result);
 })
 .WithName("GetCosmosDbMessage");
