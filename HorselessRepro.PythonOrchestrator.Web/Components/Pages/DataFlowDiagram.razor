@@ -1,7 +1,11 @@
 ﻿@using System.Timers
 @using System.Text
+@using HorselessRepro.PythonOrchestrator.Models
+@using Microsoft.Azure.Cosmos
 @inject BlobServiceClient blobClient
 @inject QueueServiceClient queueServiceClient
+@inject CosmosClient cosmosClient
+
 @rendermode InteractiveServer
 
 <h3>Data Flow Diagram</h3>
@@ -10,9 +14,14 @@
     <button class="btn btn-secondary" @onclick="ZoomIn">+</button>
     <span class="ms-2">Zoom: @($"{zoomLevel:P0}")</span>
 </div>
-<div class="dataflow-diagram-container">
-    <svg width="100%" height="600" viewBox="0 0 1400 600" style="background:#f9f9f9; display:block;">
-        <g style="transform: scale(@zoomLevel); transform-origin: 0 0;">
+<div class="dataflow-diagram-container"
+     @onmouseup="OnMouseUp"
+     @onmouseleave="OnMouseUp"
+     @onmousemove="OnMouseMove">
+    <svg width="100%" height="600" viewBox="0 0 1400 600" style="background:#f9f9f9; display:block;"
+         @onwheel="OnWheel"
+         @onmousedown="OnMouseDown">
+        <g style="transform: translate(@panXpx, @panYpx) scale(@zoomLevel); transform-origin: 0 0;">
             <defs>
                 <marker id="arrowhead" markerWidth="10" markerHeight="7"
                         refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
@@ -85,6 +94,17 @@
 
     private double zoomLevel = 1.0;
 
+    // Pan state
+    private double panX = 0;
+    private double panY = 0;
+    private double lastMouseX;
+    private double lastMouseY;
+    private bool isPanning = false;
+
+    // For CSS style string
+    private string panXpx => $"{panX}px";
+    private string panYpx => $"{panY}px";
+
     protected override void OnInitialized()
     {
         refreshTimer = new System.Timers.Timer(2000);
@@ -101,7 +121,35 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private Task<string> GetCosmosDbMessageAsync() => Task.FromResult("CosmosDB message here");
+    private async Task<string> GetCosmosDbMessageAsync()
+    {
+        try
+        {
+            var database = cosmosClient.GetDatabase("reprodb");
+            var container = database.GetContainer("entries");
+
+            var query = "SELECT TOP 1 c.id, c.Description FROM c ORDER BY c._ts DESC";
+            var iterator = container.GetItemQueryIterator<ToDoItem>(query);
+
+            var sb = new StringBuilder();
+            int count = 0;
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                foreach (var item in response)
+                {
+                    sb.AppendLine($"Id: {item.Id}, Desc: {item.Description}");
+                    count++;
+                }
+            }
+
+            return count > 0 ? sb.ToString() : "No ToDoItems found in CosmosDB.";
+        }
+        catch (Exception ex)
+        {
+            return $"Error reading CosmosDB: {ex.Message}";
+        }
+    }
 
     public void Dispose()
     {
@@ -169,5 +217,45 @@
     private void ZoomOut()
     {
         zoomLevel = Math.Max(zoomLevel - 0.1, 0.5);
+    }
+
+    private async Task OnWheel(WheelEventArgs e)
+    {
+        // e.PreventDefault(); // Uncomment if you want to prevent page scroll
+        if (e.DeltaY < 0)
+        {
+            ZoomIn();
+        }
+        else if (e.DeltaY > 0)
+        {
+            ZoomOut();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OnMouseDown(MouseEventArgs e)
+    {
+        isPanning = true;
+        lastMouseX = e.ClientX;
+        lastMouseY = e.ClientY;
+    }
+
+    private void OnMouseUp(MouseEventArgs e)
+    {
+        isPanning = false;
+    }
+
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        if (isPanning)
+        {
+            var dx = (e.ClientX - lastMouseX) / zoomLevel;
+            var dy = (e.ClientY - lastMouseY) / zoomLevel;
+            panX += dx;
+            panY += dy;
+            lastMouseX = e.ClientX;
+            lastMouseY = e.ClientY;
+            StateHasChanged();
+        }
     }
 }

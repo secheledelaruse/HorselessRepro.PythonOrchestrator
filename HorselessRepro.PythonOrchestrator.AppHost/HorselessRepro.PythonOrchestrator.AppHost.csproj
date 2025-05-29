@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ApiService\HorselessRepro.PythonOrchestrator.ApiService.csproj" />
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Models.InitPod\HorselessRepro.PythonOrchestrator.Models.InitPod.csproj" />
+    <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Models\HorselessRepro.PythonOrchestrator.Models.csproj" />
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ReproFunctions\HorselessRepro.PythonOrchestrator.ReproFunctions.csproj" />
     <ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Web\HorselessRepro.PythonOrchestrator.Web.csproj" />
   </ItemGroup>

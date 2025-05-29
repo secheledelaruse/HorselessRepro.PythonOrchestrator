@@ -21,6 +21,21 @@ public class WeatherApiClient(HttpClient httpClient)
 
         return forecasts?.ToArray() ?? [];
     }
+
+    public async Task<string> GetBlobMessageAsync(CancellationToken cancellationToken = default)
+    {
+        return await httpClient.GetStringAsync("/getBlobMessage", cancellationToken);
+    }
+
+    public async Task<string> GetQueueItemsAsync(CancellationToken cancellationToken = default)
+    {
+        return await httpClient.GetStringAsync("/getQueueItems", cancellationToken);
+    }
+
+    public async Task<string> GetCosmosDbMessageAsync(CancellationToken cancellationToken = default)
+    {
+        return await httpClient.GetStringAsync("/getCosmosDbMessage", cancellationToken);
+    }
 }
 
 public record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

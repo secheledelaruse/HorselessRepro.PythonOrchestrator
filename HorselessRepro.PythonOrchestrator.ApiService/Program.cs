@@ -1,7 +1,11 @@
+using HorselessRepro.PythonOrchestrator.ApiService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
+
+builder.Services.AddScoped<IStorageLayer, StorageLayer>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -34,6 +38,28 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+// Expose minimal API endpoints for IStorageLayer methods
+app.MapGet("/getBlobMessage", async (IStorageLayer storage) =>
+{
+    var result = await storage.GetBlobMessageAsync();
+    return Results.Ok(result);
+})
+.WithName("GetBlobMessage");
+
+app.MapGet("/getQueueItems", async (IStorageLayer storage) =>
+{
+    var result = await storage.GetQueueItemsAsync();
+    return Results.Ok(result);
+})
+.WithName("GetQueueItems");
+
+app.MapGet("/getCosmosDbMessage", async (IStorageLayer storage) =>
+{
+    var result = await storage.GetCosmosDbMessageAsync();
+    return Results.Ok(result);
+})
+.WithName("GetCosmosDbMessage");
 
 app.MapDefaultEndpoints();
 

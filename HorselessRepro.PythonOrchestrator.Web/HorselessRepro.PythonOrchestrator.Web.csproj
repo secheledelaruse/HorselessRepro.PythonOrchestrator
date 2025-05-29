@@ -13,6 +13,7 @@
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Queues" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Models\HorselessRepro.PythonOrchestrator.Models.csproj" />
 		<ProjectReference Include="..\HorselessRepro.PythonOrchestrator.ServiceDefaults\HorselessRepro.PythonOrchestrator.ServiceDefaults.csproj" />
 	</ItemGroup>
 
