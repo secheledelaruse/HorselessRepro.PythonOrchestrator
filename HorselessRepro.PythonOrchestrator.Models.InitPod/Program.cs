@@ -13,10 +13,10 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
         {
             HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
             builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
-            builder.Configuration.AddJsonFile("app.settings.json", optional: true, reloadOnChange: true);
+            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             builder.AddServiceDefaults();
-            builder.AddAzureCosmosClient(connectionName: "cosmos-db");
+            builder.AddAzureCosmosClient(connectionName: "reprodb");
             builder.AddAzureBlobClient("AzureWebJobsStorage");
             Console.WriteLine("Hello, World!");
 
@@ -36,7 +36,7 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
                     var blobClient = scope.ServiceProvider.GetRequiredService<BlobServiceClient>();
                     var containerClient = blobClient.GetBlobContainerClient("reprocontainer");
                     
-                    await containerClient.CreateIfNotExistsAsync();
+                    var containerInfo = await containerClient.CreateIfNotExistsAsync();
 
                     // ensure the required cosmos database and container
                     var cosmosClient = scope.ServiceProvider.GetRequiredService<CosmosClient>();
