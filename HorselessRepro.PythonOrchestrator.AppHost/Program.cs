@@ -77,10 +77,8 @@ var container = db.AddContainer("entries", "/PartitionKey");
 // get the ipAddress of the host
 var ipAddress = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
     .AddressList.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
-
-var ipAddressOrLocalhost = ipAddress ?? "localhost";
-
-var storageUri = $"DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://{ipAddressOrLocalhost}:10000/devstoreaccount1;QueueEndpoint=http://{ipAddressOrLocalhost}:10001/devstoreaccount1;TableEndpoint=http://{ipAddressOrLocalhost}:10002/devstoreaccount1;";
+  
+var storageUri = $"DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://{ipAddress}:10000/devstoreaccount1;QueueEndpoint=http://{ipAddress}:10001/devstoreaccount1;TableEndpoint=http://{ipAddress}:10002/devstoreaccount1;";
 
 var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Models_InitPod>("horselessdistributedlocking-sample-initpod")
         .WithReference(cosmosConnection)
@@ -97,8 +95,8 @@ var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonO
                         .WithReference(cosmosConnection)
                         .WithReference(cosmos)
                         .WithEnvironment("ConnectionStrings:AzureWebjobsStorage", storageUri)
-                        .WithEnvironment("cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-                        .WithEnvironment("Values__ConnectionStrings__cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+                        .WithEnvironment("cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+                        .WithEnvironment("Values__ConnectionStrings__cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
                         .WithHostStorage(storage)
                         .WaitFor(storage) 
                         .WaitFor(initPod);
@@ -110,8 +108,8 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
     .WithReference(cosmosConnection)
     .WithReference(cosmos)
     .WithEnvironment("AzureWebJobsStorage", storageUri)
-    .WithEnvironment("ConnectionStrings:cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-    .WithEnvironment("cosmosdb", "AccountEndpoint=http://192.168.10.123:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+    ///.WithEnvironment("ConnectionStrings:cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+    .WithEnvironment("cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
     // .WithReference(storageConnectionString)
     .WaitFor(blobs)
     .WaitFor(initPod);

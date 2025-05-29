@@ -54,3 +54,41 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.animated-edge {
+    stroke: #1976d2;
+    stroke-width: 4;
+    stroke-dasharray: 10, 10;
+    animation: dashmove 1s linear infinite;
+    marker-end: url(#arrowhead);
+}
+
+@keyframes dashmove {
+    to {
+        stroke-dashoffset: -20;
+    }
+}
+
+.node-message {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 60px;
+    padding: 2px 4px;
+    text-shadow: 1px 1px 2px #222, 0 0 1px #000;
+}
+
+.node-message.queue {
+    color: #222;
+    text-shadow: none;
+}
+
+.dataflow-diagram-container {
+    width: 100vw;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0;
+}
