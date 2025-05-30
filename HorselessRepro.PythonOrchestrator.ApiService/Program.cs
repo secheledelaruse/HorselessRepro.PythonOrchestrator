@@ -46,9 +46,9 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 // Expose minimal API endpoints for IStorageLayer methods
-app.MapGet("/getBlobMessage", async (IStorageLayer storage) =>
+app.MapGet("/getBlobMessage", async (IStorageLayer storage, string? containerName, string? blobName) =>
 {
-    var result = await storage.GetBlobMessageAsync();
+    var result = await storage.GetBlobMessageAsync(containerName, blobName);
     return Results.Ok(result);
 })
 .WithName("GetBlobMessage");

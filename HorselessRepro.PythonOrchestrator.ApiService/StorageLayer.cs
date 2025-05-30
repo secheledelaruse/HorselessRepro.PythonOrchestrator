@@ -10,7 +10,7 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
     {
         Task<string> GetQueueItemsAsync();
         Task<string> GetCosmosDbMessageAsync(string containerName);
-        Task<string> GetBlobMessageAsync();
+        Task<string> GetBlobMessageAsync(string? containerName, string? blobName);
     }
     public class StorageLayer : IStorageLayer
     {
@@ -58,11 +58,11 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
 
             return reflectedBlobMessage;
         }
-        public async Task<string> GetBlobMessageAsync()
+        public async Task<string> GetBlobMessageAsync(string? containerName, string? blobName)
         {
             var currentBlobMessage = string.Empty;
-            var containerClient =this. blobClient.GetBlobContainerClient("reprocontainer");
-            var blobClient = containerClient.GetBlobClient("reproblob.txt");
+            var containerClient =this. blobClient.GetBlobContainerClient(containerName);
+            var blobClient = containerClient.GetBlobClient(blobName);
 
             if (await blobClient.ExistsAsync())
             {

@@ -13,5 +13,10 @@ namespace HorselessRepro.PythonOrchestrator.Models
 
         public const string CosmosContainerEntries = "entries";
         public const string CosmosContainerPyEntries = "pyentries";
+
+        public const string ReproBlobContainerName = "reprocontainer";
+        public const string ReproBlobName = "reproblob.txt";
+        public const string PythonReproBlobName = "pythonreproblob.txt";
+
     }
 }

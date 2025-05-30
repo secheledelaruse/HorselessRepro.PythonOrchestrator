@@ -102,7 +102,7 @@
     private string queueTriggerMessage = "QueueTrigger updates message and writes to CosmosDB.";
     private string cosmosDbMessage = "Loading...";
     private string pythonCosmosMessage = "Loading...";
-
+    private string pythonBlobMessage = "Loading...";
     private System.Timers.Timer? refreshTimer;
 
     private double zoomLevel = 1.0;
@@ -128,7 +128,8 @@
 
     private async Task RefreshData()
     {
-        blobMessage = await GetBlobMessageAsync();
+        blobMessage = await GetBlobMessageAsync(Constants.ReproBlobContainerName, Constants.ReproBlobName);
+        pythonBlobMessage = await WeatherApiClient.GetBlobMessageAsync(Constants.ReproBlobContainerName, Constants.PythonReproBlobName);
         queueItems = await GetQueueItemsAsync();
         cosmosDbMessage = await GetCosmosDbMessageAsync(Constants.CosmosContainerEntries);
         pythonCosmosMessage = await GetPythonCosmosDbMessageAsync(Constants.CosmosContainerPyEntries);
@@ -178,11 +179,11 @@
         refreshTimer?.Dispose();
     }
 
-    protected async Task<string> GetBlobMessageAsync()
+    protected async Task<string> GetBlobMessageAsync(string containerName, string blobName)
     {
         try
         {
-            return await WeatherApiClient.GetBlobMessageAsync();
+            return await WeatherApiClient.GetBlobMessageAsync(containerName, blobName);
         }
         catch (Exception ex)
         {

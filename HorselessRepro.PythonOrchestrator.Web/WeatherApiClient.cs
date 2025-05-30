@@ -29,6 +29,11 @@ public class WeatherApiClient(HttpClient httpClient)
         return await httpClient.GetStringAsync("/getBlobMessage", cancellationToken);
     }
 
+    public async Task<string> GetBlobMessageAsync(string containerName, string blobName, CancellationToken cancellationToken = default)
+    {
+        return await httpClient.GetStringAsync($"/getBlobMessage?containerName={containerName}&blobName={blobName}", cancellationToken);
+    }
+
     public async Task<string> GetQueueItemsAsync(CancellationToken cancellationToken = default)
     {
         return await httpClient.GetStringAsync("/getQueueItems", cancellationToken);
