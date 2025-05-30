@@ -112,8 +112,9 @@ var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonO
 var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_ApiService>("apiservice")
     .WithReference(cosmos)
     .WithReference(cosmosConnection)
-    .WithEnvironment("cosmos-db", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-    .WithEnvironment("ConnectionStrings__cosmos-db", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+    .WithEnvironment("COSMOS_DB_ENDPOINT", $"http://{ipAddress}:8081/")
+    .WithEnvironment("COSMOS_DB_KEY", $"C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
+    .WithEnvironment("ConnectionStrings__cosmos-db", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
     .WaitFor(cosmos)
     .WaitFor(storage)
     .WaitFor(initPod);

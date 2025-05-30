@@ -85,6 +85,14 @@ h1:focus {
     text-shadow: none;
 }
 
+.node-message-scrollable {
+    max-height: 70px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
 .dataflow-diagram-container {
     width: 100vw;
     overflow-x: auto;

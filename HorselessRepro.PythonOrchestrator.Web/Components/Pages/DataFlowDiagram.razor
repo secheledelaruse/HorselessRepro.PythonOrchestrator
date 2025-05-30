@@ -19,7 +19,7 @@
      @onmouseup="OnMouseUp"
      @onmouseleave="OnMouseUp"
      @onmousemove="OnMouseMove">
-    <svg width="100%" height="600" viewBox="0 0 1400 600" style="background:#f9f9f9; display:block;"
+    <svg width="100%" height="600" viewBox="0 0 1800 600" style="background:#f9f9f9; display:block;"
          @onwheel="OnWheel"
          @onmousedown="OnMouseDown">
         <g style="transform: translate(@panXpx, @panYpx) scale(@zoomLevel); transform-origin: 0 0;">
@@ -63,10 +63,18 @@
             </g>
             <!-- CosmosDB Node -->
             <g>
-                <rect x="1100" y="250" width="250" height="150" rx="20" fill="#d32f2f" />
-                <text x="1225" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">CosmosDB</text>
-                <foreignObject x="1115" y="300" width="220" height="80">
+                <rect x="1200" y="250" width="250" height="150" rx="20" fill="#d32f2f" />
+                <text x="1325" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">CosmosDB</text>
+                <foreignObject x="1215" y="300" width="220" height="80">
                     <div class="node-message">@cosmosDbMessage</div>
+                </foreignObject>
+            </g>
+            <!-- PythonCosmos Node -->
+            <g>
+                <rect x="1550" y="250" width="200" height="150" rx="20" fill="#b71c1c" />
+                <text x="1650" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">PythonCosmos</text>
+                <foreignObject x="1565" y="300" width="170" height="80">
+                    <div class="node-message node-message-scrollable">@pythonCosmosMessage</div>
                 </foreignObject>
             </g>
 
@@ -79,7 +87,9 @@
                 <!-- Queue -> QueueTrigger -->
                 <line x1="670" y1="475" x2="750" y2="475" class="animated-edge" />
                 <!-- QueueTrigger -> CosmosDB -->
-                <line x1="1070" y1="475" x2="1100" y2="325" class="animated-edge" />
+                <line x1="1070" y1="475" x2="1200" y2="325" class="animated-edge" />
+                <!-- CosmosDB -> PythonCosmos -->
+                <line x1="1450" y1="325" x2="1550" y2="325" class="animated-edge" />
             </g>
         </g>
     </svg>
@@ -121,15 +131,14 @@
         blobMessage = await GetBlobMessageAsync();
         queueItems = await GetQueueItemsAsync();
         cosmosDbMessage = await GetCosmosDbMessageAsync(Constants.CosmosContainerEntries);
-        pythonCosmosMessage = await GetCosmosDbMessageAsync(Constants.CosmosContainerPyEntries);
+        pythonCosmosMessage = await GetPythonCosmosDbMessageAsync(Constants.CosmosContainerPyEntries);
         await InvokeAsync(StateHasChanged);
     }
 
     private async Task<string> GetCosmosDbMessageAsync(string containerName)
     {
         try
-        { 
-
+        {
             var currentMessage = await WeatherApiClient.GetLocalHostCosmosDbMessages(containerName);
             if (currentMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage) &&
                 !cosmosDbMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage))
@@ -137,9 +146,26 @@
                 // don't show empty queue messages
                 return cosmosDbMessage;
             }
-
             return currentMessage;
+        }
+        catch (Exception ex)
+        {
+            return $"Error reading CosmosDB: {ex.Message}";
+        }
+    }
 
+    private async Task<string> GetPythonCosmosDbMessageAsync(string containerName)
+    {
+        try
+        {
+            var currentMessage = await WeatherApiClient.GetLocalHostCosmosDbMessages(containerName);
+            if (currentMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage) &&
+                !pythonCosmosMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage))
+            {
+                // don't show empty queue messages
+                return pythonCosmosMessage;
+            }
+            return currentMessage;
         }
         catch (Exception ex)
         {
@@ -168,15 +194,13 @@
     {
         try
         {
-
             var currentMessage = await WeatherApiClient.GetQueueItemsAsync();
-            if(currentMessage.ToLower().Contains(Constants.NoMessagesInQueueMessage) && 
+            if (currentMessage.ToLower().Contains(Constants.NoMessagesInQueueMessage) &&
                 !queueItems.ToLower().Contains(Constants.NoMessagesInQueueMessage))
             {
                 // don't show empty queue messages
                 return queueItems;
             }
-
             return currentMessage;
         }
         catch (Exception ex)
@@ -197,7 +221,6 @@
 
     private async Task OnWheel(WheelEventArgs e)
     {
-        // e.PreventDefault(); // Uncomment if you want to prevent page scroll
         if (e.DeltaY < 0)
         {
             ZoomIn();

@@ -77,12 +77,12 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
             return currentBlobMessage;
         }
 
-        public async Task<string> GetCosmosDbMessageAsync(string containerName = "entries")
+        public async Task<string> GetCosmosDbMessageAsync(string containerName = Constants.CosmosContainerEntries)
         {
             try
             {
                 var database = cosmosClient.GetDatabase("reprodb");
-                var container = database.GetContainer("entries");
+                var container = database.GetContainer(containerName);
 
                 var query = "SELECT TOP 1 c.id, c.Description FROM c ORDER BY c._ts DESC";
                 var iterator = container.GetItemQueryIterator<ToDoItem>(query);

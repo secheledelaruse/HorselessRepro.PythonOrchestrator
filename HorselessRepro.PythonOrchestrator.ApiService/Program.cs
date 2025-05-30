@@ -64,11 +64,26 @@ app.MapGet("/getQueueItems", async (IStorageLayer storage) =>
 app.MapGet("/getCosmosDbMessage", async (ICosmosChangeFeedService changeFeed, IStorageLayer storage, string? containerName) =>
 {
     // Use the provided containerName or default to "entries" if not specified
-    changeFeed.ChangeFeedQueue.TryDequeue(out var item);
-    if (item != null)
+    if(containerName == Constants.CosmosContainerPyEntries)
     {
-        return Results.Ok(item.Description);
+        // If the container is "pyentries", we assume it's for Python functions
+        changeFeed.PythonChangeFeedQueue.TryDequeue(out var pythonUpdatedItem);
+        if (pythonUpdatedItem != null)
+        {
+            return Results.Ok(pythonUpdatedItem.Description);
+        }
+
     }
+
+    else if (containerName == Constants.CosmosContainerEntries)
+    {
+        changeFeed.ChangeFeedQueue.TryDequeue(out var item);
+        if (item != null)
+        {
+            return Results.Ok(item.Description);
+        }
+    }
+
 
     return Results.Ok(Constants.CosmosResultsUnavailableMessage);
 })
