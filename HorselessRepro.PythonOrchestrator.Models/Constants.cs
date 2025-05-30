@@ -8,7 +8,10 @@ namespace HorselessRepro.PythonOrchestrator.Models
 {
     public static class Constants
     {
-        public static string CosmosResultsUnavailableMessage => "cosmos result unavailable";
-        public static string NoMessagesInQueueMessage => "no messages in queue";
+        public const string CosmosResultsUnavailableMessage = "cosmos result unavailable";
+        public const string NoMessagesInQueueMessage = "no messages in queue";
+
+        public const string CosmosContainerEntries = "entries";
+        public const string CosmosContainerPyEntries = "pyentries";
     }
 }

@@ -1,3 +1,5 @@
+using HorselessRepro.PythonOrchestrator.Models;
+
 namespace HorselessRepro.PythonOrchestrator.Web;
 
 public class WeatherApiClient(HttpClient httpClient)
@@ -32,9 +34,9 @@ public class WeatherApiClient(HttpClient httpClient)
         return await httpClient.GetStringAsync("/getQueueItems", cancellationToken);
     }
 
-    public async Task<string> GetLocalHostCosmosDbMessages(CancellationToken cancellationToken = default)
+    public async Task<string> GetLocalHostCosmosDbMessages(string containerName = Constants.CosmosContainerEntries, CancellationToken cancellationToken = default)
     {
-        return await httpClient.GetStringAsync("/getCosmosDbMessage?containerName=entries", cancellationToken);
+        return await httpClient.GetStringAsync($"/getCosmosDbMessage?containerName={containerName}", cancellationToken);
     }
 
     public async Task<string> GetPythonFuncsMessages(CancellationToken cancellationToken = default)

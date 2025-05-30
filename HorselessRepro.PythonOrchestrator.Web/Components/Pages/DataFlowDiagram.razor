@@ -120,16 +120,17 @@
     {
         blobMessage = await GetBlobMessageAsync();
         queueItems = await GetQueueItemsAsync();
-        cosmosDbMessage = await GetCosmosDbMessageAsync();
+        cosmosDbMessage = await GetCosmosDbMessageAsync(Constants.CosmosContainerEntries);
+        pythonCosmosMessage = await GetCosmosDbMessageAsync(Constants.CosmosContainerPyEntries);
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task<string> GetCosmosDbMessageAsync()
+    private async Task<string> GetCosmosDbMessageAsync(string containerName)
     {
         try
         { 
 
-            var currentMessage = await WeatherApiClient.GetQueueItemsAsync();
+            var currentMessage = await WeatherApiClient.GetLocalHostCosmosDbMessages(containerName);
             if (currentMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage) &&
                 !cosmosDbMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage))
             {
