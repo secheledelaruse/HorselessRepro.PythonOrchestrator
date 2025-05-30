@@ -47,18 +47,18 @@
             </g>
             <!-- Python Blob Trigger Node -->
             <g>
-                <rect x="640" y="60" width="250" height="120" rx="20" fill="#8e24aa" />
-                <text x="765" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Python Blob Trigger</text>
-                <foreignObject x="655" y="120" width="220" height="50">
+                <rect x="740" y="60" width="250" height="120" rx="20" fill="#8e24aa" />
+                <text x="865" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Python Blob Trigger</text>
+                <foreignObject x="755" y="120" width="220" height="50">
                     <div class="node-message">python function will read blob update content and write new blob</div>
                 </foreignObject>
             </g>
             <!-- Python Blob Storage Node -->
             <g>
-                <rect x="940" y="60" width="250" height="120" rx="20" fill="#388e3c" />
-                <text x="1065" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">python blob storage</text>
-                <foreignObject x="955" y="120" width="220" height="50">
-                    <div class="node-message">@pythonBlobMessage</div>
+                <rect x="1140" y="60" width="250" height="120" rx="20" fill="#388e3c" />
+                <text x="1265" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">python blob storage</text>
+                <foreignObject x="1155" y="120" width="220" height="50">
+                    <div class="node-message node-message-scrollable">@pythonBlobMessage</div>
                 </foreignObject>
             </g>
             <!-- Queue Node -->
@@ -99,9 +99,9 @@
                 <!-- Timer -> Blob -->
                 <line x1="290" y1="310" x2="340" y2="120" class="animated-edge" />
                 <!-- Blob Storage -> Python Blob Trigger -->
-                <line x1="590" y1="120" x2="640" y2="120" class="animated-edge" />
+                <line x1="590" y1="120" x2="740" y2="120" class="animated-edge" />
                 <!-- Python Blob Trigger -> Python Blob Storage -->
-                <line x1="890" y1="120" x2="940" y2="120" class="animated-edge" />
+                <line x1="990" y1="120" x2="1140" y2="120" class="animated-edge" />
                 <!-- Timer -> Queue -->
                 <line x1="290" y1="310" x2="340" y2="460" class="animated-edge" />
                 <!-- Queue -> QueueTrigger -->
