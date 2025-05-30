@@ -2,7 +2,10 @@
 
 this is an aspire app with python and c# functions
 
+![image](https://github.com/user-attachments/assets/a986e5a8-e076-4615-a445-df46a8555fb8)
+
 it's meant to exercise connecting the containerized python functions and the non-containerized c# functions to the same storage emulator
+
 
 the aim is to get rid of the below error
 ```
@@ -27,3 +30,5 @@ fail: Host.Startup[0]
          at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
 
 ```
+
+![image](https://github.com/user-attachments/assets/69811e05-1d38-415d-a050-1e0d0a36e68a)
