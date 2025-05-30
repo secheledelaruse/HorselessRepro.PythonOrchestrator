@@ -19,7 +19,7 @@
      @onmouseup="OnMouseUp"
      @onmouseleave="OnMouseUp"
      @onmousemove="OnMouseMove">
-    <svg width="100%" height="600" viewBox="0 0 1800 600" style="background:#f9f9f9; display:block;"
+    <svg width="100%" height="600" viewBox="0 0 2000 600" style="background:#f9f9f9; display:block;"
          @onwheel="OnWheel"
          @onmousedown="OnMouseDown">
         <g style="transform: translate(@panXpx, @panYpx) scale(@zoomLevel); transform-origin: 0 0;">
@@ -31,49 +31,65 @@
             </defs>
             <!-- Timer Trigger Node -->
             <g>
-                <rect x="40" y="250" width="250" height="150" rx="20" fill="#1976d2" />
-                <text x="165" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">Timer Trigger</text>
-                <foreignObject x="55" y="300" width="220" height="80">
+                <rect x="40" y="250" width="250" height="120" rx="20" fill="#1976d2" />
+                <text x="165" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Timer Trigger</text>
+                <foreignObject x="55" y="300" width="220" height="50">
                     <div class="node-message">@timerMessage</div>
                 </foreignObject>
             </g>
             <!-- Blob Storage Node -->
             <g>
-                <rect x="350" y="60" width="320" height="150" rx="20" fill="#388e3c" />
-                <text x="510" y="95" fill="white" text-anchor="middle" font-size="20" font-weight="bold">Blob Storage</text>
-                <foreignObject x="365" y="120" width="290" height="80">
+                <rect x="340" y="60" width="250" height="120" rx="20" fill="#388e3c" />
+                <text x="465" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Blob Storage</text>
+                <foreignObject x="355" y="120" width="220" height="50">
                     <div class="node-message">@blobMessage</div>
+                </foreignObject>
+            </g>
+            <!-- Python Blob Trigger Node -->
+            <g>
+                <rect x="640" y="60" width="250" height="120" rx="20" fill="#8e24aa" />
+                <text x="765" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Python Blob Trigger</text>
+                <foreignObject x="655" y="120" width="220" height="50">
+                    <div class="node-message">python function will read blob update content and write new blob</div>
+                </foreignObject>
+            </g>
+            <!-- Python Blob Storage Node -->
+            <g>
+                <rect x="940" y="60" width="250" height="120" rx="20" fill="#388e3c" />
+                <text x="1065" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">python blob storage</text>
+                <foreignObject x="955" y="120" width="220" height="50">
+                    <div class="node-message">@pythonBlobMessage</div>
                 </foreignObject>
             </g>
             <!-- Queue Node -->
             <g>
-                <rect x="350" y="400" width="320" height="150" rx="20" fill="#fbc02d" />
-                <text x="510" y="435" fill="black" text-anchor="middle" font-size="20" font-weight="bold">Queue</text>
-                <foreignObject x="365" y="460" width="290" height="80">
+                <rect x="340" y="400" width="250" height="120" rx="20" fill="#fbc02d" />
+                <text x="465" y="435" fill="black" text-anchor="middle" font-size="18" font-weight="bold">Queue</text>
+                <foreignObject x="355" y="460" width="220" height="50">
                     <div class="node-message queue">@queueItems</div>
                 </foreignObject>
             </g>
             <!-- Queue Trigger Node -->
             <g>
-                <rect x="750" y="400" width="320" height="150" rx="20" fill="#8e24aa" />
-                <text x="910" y="435" fill="white" text-anchor="middle" font-size="20" font-weight="bold">Queue Trigger</text>
-                <foreignObject x="765" y="460" width="290" height="80">
+                <rect x="640" y="400" width="250" height="120" rx="20" fill="#8e24aa" />
+                <text x="765" y="435" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Queue Trigger</text>
+                <foreignObject x="655" y="460" width="220" height="50">
                     <div class="node-message">@queueTriggerMessage</div>
                 </foreignObject>
             </g>
             <!-- CosmosDB Node -->
             <g>
-                <rect x="1200" y="250" width="250" height="150" rx="20" fill="#d32f2f" />
-                <text x="1325" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">CosmosDB</text>
-                <foreignObject x="1215" y="300" width="220" height="80">
+                <rect x="1100" y="250" width="250" height="120" rx="20" fill="#d32f2f" />
+                <text x="1225" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">CosmosDB</text>
+                <foreignObject x="1115" y="300" width="220" height="50">
                     <div class="node-message">@cosmosDbMessage</div>
                 </foreignObject>
             </g>
             <!-- PythonCosmos Node -->
             <g>
-                <rect x="1550" y="250" width="200" height="150" rx="20" fill="#b71c1c" />
-                <text x="1650" y="285" fill="white" text-anchor="middle" font-size="20" font-weight="bold">PythonCosmos</text>
-                <foreignObject x="1565" y="300" width="170" height="80">
+                <rect x="1400" y="250" width="200" height="120" rx="20" fill="#b71c1c" />
+                <text x="1500" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">PythonCosmos</text>
+                <foreignObject x="1415" y="300" width="170" height="50">
                     <div class="node-message node-message-scrollable">@pythonCosmosMessage</div>
                 </foreignObject>
             </g>
@@ -81,15 +97,19 @@
             <!-- Animated Edges -->
             <g>
                 <!-- Timer -> Blob -->
-                <line x1="290" y1="325" x2="350" y2="135" class="animated-edge" />
+                <line x1="290" y1="310" x2="340" y2="120" class="animated-edge" />
+                <!-- Blob Storage -> Python Blob Trigger -->
+                <line x1="590" y1="120" x2="640" y2="120" class="animated-edge" />
+                <!-- Python Blob Trigger -> Python Blob Storage -->
+                <line x1="890" y1="120" x2="940" y2="120" class="animated-edge" />
                 <!-- Timer -> Queue -->
-                <line x1="290" y1="325" x2="350" y2="475" class="animated-edge" />
+                <line x1="290" y1="310" x2="340" y2="460" class="animated-edge" />
                 <!-- Queue -> QueueTrigger -->
-                <line x1="670" y1="475" x2="750" y2="475" class="animated-edge" />
+                <line x1="590" y1="460" x2="640" y2="460" class="animated-edge" />
                 <!-- QueueTrigger -> CosmosDB -->
-                <line x1="1070" y1="475" x2="1200" y2="325" class="animated-edge" />
+                <line x1="890" y1="460" x2="1100" y2="310" class="animated-edge" />
                 <!-- CosmosDB -> PythonCosmos -->
-                <line x1="1450" y1="325" x2="1550" y2="325" class="animated-edge" />
+                <line x1="1350" y1="310" x2="1400" y2="310" class="animated-edge" />
             </g>
         </g>
     </svg>
