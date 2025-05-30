@@ -157,7 +157,16 @@
     {
         try
         {
-            return await WeatherApiClient.GetQueueItemsAsync();
+
+            var currentMessage = await WeatherApiClient.GetQueueItemsAsync();
+            if(currentMessage.ToLower().Contains("no messages in the queue") && 
+                !queueItems.ToLower().Contains("no messages in the queue"))
+            {
+                // don't show empty queue messages
+                return queueItems;
+            }
+
+            return currentMessage;
         }
         catch (Exception ex)
         {
