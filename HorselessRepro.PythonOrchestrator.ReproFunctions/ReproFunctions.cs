@@ -78,7 +78,7 @@ namespace HorselessRepro.PythonOrchestrator.ReproFunctions
             var todo = new ToDoItem
             {
                 Id = Guid.NewGuid().ToString(),
-                Description = queueMessage + $"seen by {nameof(QueueTriggered)} queue",
+                Description = queueMessage + $" seen by {nameof(QueueTriggered)} queue and stored reprodb.entries",
                 PartitionKey = "ToDoItem"
             };
 

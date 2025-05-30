@@ -48,7 +48,7 @@ namespace HorselessRepro.PythonOrchestrator.ApiService
                 }
                 else
                 {
-                    reflectedBlobMessage = "No messages in the queue.";
+                    reflectedBlobMessage = Constants.NoMessagesInQueueMessage; // "No messages in the queue.";
                 }
             }
             else

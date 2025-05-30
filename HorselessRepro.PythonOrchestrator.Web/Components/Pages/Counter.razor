@@ -1,5 +1,6 @@
 ﻿@page "/counter"
 @using System.Text
+@using HorselessRepro.PythonOrchestrator.Models
 @inject BlobServiceClient blobClient
 @inject QueueServiceClient queueServiceClient
 @rendermode InteractiveServer
@@ -96,7 +97,7 @@
             }
             else
             {
-                reflectedBlobMessage = "No messages in the queue.";
+                reflectedBlobMessage = Constants.NoMessagesInQueueMessage; // "No messages in the queue.";
             }
         }
         else

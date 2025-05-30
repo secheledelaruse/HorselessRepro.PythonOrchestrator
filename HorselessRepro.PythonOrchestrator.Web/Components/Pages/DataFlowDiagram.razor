@@ -127,8 +127,18 @@
     private async Task<string> GetCosmosDbMessageAsync()
     {
         try
-        {
-            return await WeatherApiClient.GetLocalHostCosmosDbMessages();
+        { 
+
+            var currentMessage = await WeatherApiClient.GetQueueItemsAsync();
+            if (currentMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage) &&
+                !cosmosDbMessage.ToLower().Contains(Constants.CosmosResultsUnavailableMessage))
+            {
+                // don't show empty queue messages
+                return cosmosDbMessage;
+            }
+
+            return currentMessage;
+
         }
         catch (Exception ex)
         {
@@ -159,8 +169,8 @@
         {
 
             var currentMessage = await WeatherApiClient.GetQueueItemsAsync();
-            if(currentMessage.ToLower().Contains("no messages in the queue") && 
-                !queueItems.ToLower().Contains("no messages in the queue"))
+            if(currentMessage.ToLower().Contains(Constants.NoMessagesInQueueMessage) && 
+                !queueItems.ToLower().Contains(Constants.NoMessagesInQueueMessage))
             {
                 // don't show empty queue messages
                 return queueItems;

@@ -1,4 +1,5 @@
 using HorselessRepro.PythonOrchestrator.ApiService;
+using HorselessRepro.PythonOrchestrator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,7 +70,7 @@ app.MapGet("/getCosmosDbMessage", async (ICosmosChangeFeedService changeFeed, IS
         return Results.Ok(item.Description);
     }
 
-    return Results.Ok("cosmos result unavailable");
+    return Results.Ok(Constants.CosmosResultsUnavailableMessage);
 })
 .WithName("GetCosmosDbMessage");
 
