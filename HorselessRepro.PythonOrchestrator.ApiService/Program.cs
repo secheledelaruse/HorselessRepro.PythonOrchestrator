@@ -8,6 +8,8 @@ builder.AddAzureBlobClient("blobs");
 builder.AddAzureQueueClient("AzureWebJobsStorage");
 builder.AddAzureCosmosClient(connectionName: "cosmos-db");
 
+builder.Services.AddCosmosChangeFeedService();
+
 builder.Services.AddScoped<IStorageLayer, StorageLayer>();
 
 // Add services to the container.
@@ -58,11 +60,16 @@ app.MapGet("/getQueueItems", async (IStorageLayer storage) =>
 .WithName("GetQueueItems");
 
 
-app.MapGet("/getCosmosDbMessage", async (IStorageLayer storage, string? containerName) =>
+app.MapGet("/getCosmosDbMessage", async (ICosmosChangeFeedService changeFeed, IStorageLayer storage, string? containerName) =>
 {
     // Use the provided containerName or default to "entries" if not specified
-    var result = await storage.GetCosmosDbMessageAsync(containerName ?? "entries");
-    return Results.Ok(result);
+    changeFeed.ChangeFeedQueue.TryDequeue(out var item);
+    if (item != null)
+    {
+        return Results.Ok(item.Description);
+    }
+
+    return Results.Ok("cosmos result unavailable");
 })
 .WithName("GetCosmosDbMessage");
 
