@@ -123,6 +123,7 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
     .WithReference(blobs)
     .WithReference(cosmosConnection)
     .WithReference(cosmos)
+    .WithEnvironment("ConnectionStrings__AzureWebJobsStorage", storageUri)
     .WithEnvironment("AzureWebJobsStorage", storageUri)
     ///.WithEnvironment("ConnectionStrings:cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
     .WithEnvironment("cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
