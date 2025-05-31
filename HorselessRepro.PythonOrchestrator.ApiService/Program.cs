@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.AddAzureBlobClient("blobs");
 builder.AddAzureQueueClient("AzureWebJobsStorage");
-builder.AddAzureCosmosClient(connectionName: "cosmos-db");
+builder.AddAzureCosmosClient(connectionName: "reprodb");
 
 builder.Services.AddCosmosChangeFeedService();
 
