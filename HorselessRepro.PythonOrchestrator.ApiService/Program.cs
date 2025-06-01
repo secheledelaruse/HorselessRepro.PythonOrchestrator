@@ -2,6 +2,7 @@ using HorselessRepro.PythonOrchestrator.ApiService;
 using HorselessRepro.PythonOrchestrator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();

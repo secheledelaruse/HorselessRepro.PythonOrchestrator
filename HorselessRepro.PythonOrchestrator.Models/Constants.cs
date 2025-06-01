@@ -18,5 +18,6 @@ namespace HorselessRepro.PythonOrchestrator.Models
         public const string ReproBlobName = "reproblob.txt";
         public const string PythonReproBlobName = "pythonreproblob.txt";
 
+        public const string CosmosEndpointAccountEndpoint = "CosmosEndpointConfig__AccountEndpoint";
     }
 }

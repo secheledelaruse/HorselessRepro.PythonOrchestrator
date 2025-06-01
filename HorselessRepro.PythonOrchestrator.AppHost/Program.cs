@@ -1,6 +1,9 @@
 using System.ComponentModel;
+using Microsoft.Extensions.Configuration;
 
 var builder = DistributedApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
 var storageConnectionString = builder.AddConnectionString("AzureWebJobsStorage");
 
@@ -39,42 +42,34 @@ var pythonFuncsContainer = db.AddContainer("pyentries", "/PartitionKey");
 
 #pragma warning restore ASPIRECOSMOSDB001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-
-// get the ipAddress of the host
-var ipAddress = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
-    .AddressList.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
-
-var storageUri = $"DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://{ipAddress}:10000/devstoreaccount1;QueueEndpoint=http://{ipAddress}:10001/devstoreaccount1;TableEndpoint=http://{ipAddress}:10002/devstoreaccount1;";
-
-var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Models_InitPod>("horselessdistributedlocking-sample-initpod")
-        // .WithReference(cosmosConnection)
-        .WithReference(cosmos)
-        .WithReference(db)
-        .WithReference(storageConnectionString)
-        .WaitFor(cosmos)
-        .WaitFor(cosmosConnection);
+var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Models_InitPod>("initpod") 
+    .WithReference(cosmos) 
+    .WithReference(blobs)
+    .WithReference(storageConnectionString)
+    .WithReference(db)
+    .WaitFor(storage)
+    .WaitFor(cosmos)
+    .WaitFor(cosmosConnection);
 
 
 
 var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_ApiService>("apiservice")
     .WithReference(cosmos)
     .WithReference(cosmosConnection)
-    .WithEnvironment("COSMOS_DB_ENDPOINT", $"http://{ipAddress}:8081/")
-    .WithEnvironment("COSMOS_DB_KEY", $"C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-    .WithEnvironment("ConnectionStrings__cosmos-db", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-    .WaitFor(cosmos)
+    .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
+    .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
+    .WithEnvironment("ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
     .WaitFor(storage)
     .WaitFor(initPod);
 
 var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro.PythonOrchestrator.ReproFunctions.Python")
-    .WithReference(blobs)
-    .WithReference(cosmosConnection)
+    .WithReference(blobs) 
     .WithReference(cosmos)
-    .WithEnvironment("ConnectionStrings__AzureWebJobsStorage", storageUri)
-    .WithEnvironment("AzureWebJobsStorage", storageUri)
-    .WithEnvironment("ConnectionStrings:cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-    // .WithEnvironment("cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-    // .WithReference(storageConnectionString)
+    .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
+    .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
+    .WithEnvironment("ConnectionStrings__AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
+    .WithEnvironment("AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
+    .WithEnvironment("ConnectionStrings:cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
     .WaitFor(blobs)
     .WaitFor(cosmosConnection)
     .WaitFor(cosmos)
@@ -82,20 +77,22 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
 
 
 var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonOrchestrator_ReproFunctions>("functions")
-                        .WithExternalHttpEndpoints()
-                        .WithReference(queues)
-                        .WithReference(cosmosConnection)
-                        .WithReference(cosmos)
-                        .WithEnvironment("ConnectionStrings:AzureWebjobsStorage", storageUri)
-                        .WithEnvironment("cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-                        .WithEnvironment("Values__ConnectionStrings__cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
-                        .WithHostStorage(storage)
-                        .WaitFor(storage)
-                        .WaitFor(pythonFuncs)
-                        .WaitForCompletion(initPod);
+    .WithExternalHttpEndpoints()
+    .WithReference(queues) 
+    .WithReference(cosmos)
+    .WithReference(cosmosConnection)
+    //.WithEnvironment("ConnectionStrings:AzureWebjobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
+    //.WithEnvironment("cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
+    //.WithEnvironment("Values__ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
+    .WithHostStorage(storage)
+    .WaitFor(storage)
+    .WaitFor(pythonFuncs)
+    .WaitFor(cosmos)
+    .WaitForCompletion(initPod);
 
 builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Web>("webfrontend")
-    .WithExternalHttpEndpoints()
+    .WithExternalHttpEndpoints() 
+    .WithReference(cosmos)
     .WithReference(apiService)
     .WaitForCompletion(initPod)
     .WaitFor(apiService);

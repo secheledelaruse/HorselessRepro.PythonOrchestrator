@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 // add local.settings.json to configuration
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
 builder.AddServiceDefaults();

@@ -10,7 +10,7 @@
 		<PackageReference Include="Aspire.Azure.Storage.Blobs" />
 		<PackageReference Include="Aspire.Azure.Storage.Queues" />
 		<PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Queues" />
+		<!--<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Queues" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\HorselessRepro.PythonOrchestrator.Models\HorselessRepro.PythonOrchestrator.Models.csproj" />

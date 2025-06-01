@@ -8,4 +8,4 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
-COPY . /home/site/wwwroot
+COPY . /home/site/wwwroot 
