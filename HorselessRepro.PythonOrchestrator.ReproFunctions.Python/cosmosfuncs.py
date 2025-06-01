@@ -18,8 +18,8 @@ def cosmos_db_triggered(documents: func.DocumentList) -> None:
     if documents:
         logging.info('Document id: %s', documents[0]['id'])
         # Initialize Cosmos client
-        endpoint = "<COSMOS_DB_ENDPOINT>"
-        key = "<COSMOS_DB_KEY>"
+        endpoint = os.getenv("COSMOS_DB_ENDPOINT")
+        key = os.getenv("COSMOS_DB_KEY")
         client = CosmosClient(endpoint, key)
         database_name = "reprodb"
         container_name = "pyentries"
