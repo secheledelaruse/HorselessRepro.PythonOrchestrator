@@ -83,10 +83,13 @@
             </g>
             <!-- PythonCosmos Node -->
             <g>
-                <rect x="1400" y="250" width="200" height="120" rx="20" fill="#b71c1c" />
+                <rect x="1400" y="250" width="200" 
+                      fill="#b71c1c"
+                      rx="20"
+                      height="@pythonCosmosRectHeight" />
                 <text x="1500" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">PythonCosmos</text>
-                <foreignObject x="1415" y="300" width="170" height="50">
-                    <div class="node-message node-message-scrollable">@pythonCosmosMessage</div>
+                <foreignObject x="1415" y="300" width="170" height="@pythonCosmosForeignObjectHeight">
+                    <div class="node-message">@pythonCosmosMessage</div>
                 </foreignObject>
             </g>
 
@@ -133,6 +136,9 @@
     // For CSS style string
     private string panXpx => $"{panX}px";
     private string panYpx => $"{panY}px";
+
+    private double pythonCosmosRectHeight => 120; // Default height for PythonCosmos rectangle
+    private double pythonCosmosForeignObjectHeight => 50; // Default height for PythonCosmos foreignObject
 
     protected override void OnInitialized()
     {

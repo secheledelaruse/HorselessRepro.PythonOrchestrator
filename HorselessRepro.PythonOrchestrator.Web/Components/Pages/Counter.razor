@@ -1,33 +1,19 @@
 ﻿@page "/counter"
 @using System.Text
-@using HorselessRepro.PythonOrchestrator.Models
-@inject BlobServiceClient blobClient
-@inject QueueServiceClient queueServiceClient
+@using HorselessRepro.PythonOrchestrator.Models 
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
-<p role="status">Current Blob Message: @currentBlobMessage</p>
-<p role="status">Passed Through Blob Message via Python queue function: @reflectedBlobMessage</p>
+ 
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-<br />
-<label>
-    Timer Interval (ms):
-    <input type="number" @bind="timerInterval" min="1000" step="1000" />
-</label>
-<button class="btn btn-secondary" @onclick="RestartTimer">Restart Timer</button>
+<br />  
 
 @code {
     private int currentCount = 0;
-    private string currentBlobMessage = string.Empty;
-    private string reflectedBlobMessage = "This message is passed through the Python queue function.";
-
-    private Timer? timer;
-    private int timerInterval = 2000; // 2 seconds
+ 
 
     private void IncrementCount()
     {
@@ -35,80 +21,10 @@
     }
 
     protected override async Task OnInitializedAsync()
-    {
-        await RenderBlobMessage();
-        StartTimer();
+    { 
     }
-
-    private void StartTimer()
-    {
-        timer?.Dispose();
-        timer = new Timer(async _ =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await RenderBlobMessage();
-                await RenderQueueMessage();
-                StateHasChanged();
-            });
-        }, null, timerInterval, timerInterval);
-    }
-
-    private void RestartTimer()
-    {
-        StartTimer();
-    }
-
-    protected async Task RenderBlobMessage()
-    {
-        var containerClient = this.blobClient.GetBlobContainerClient("reprocontainer");
-        var blobClient = containerClient.GetBlobClient("reproblob.txt");
-
-        if (await blobClient.ExistsAsync())
-        {
-            var response = await blobClient.DownloadContentAsync();
-            currentBlobMessage = response.Value.Content.ToString();
-        }
-        else
-        {
-            currentBlobMessage = "Blob does not exist.";
-        }
-    }
-
-    protected async Task RenderQueueMessage()
-    {
-        var queueClient = queueServiceClient.GetQueueClient("passthrough");
-        if (await queueClient.ExistsAsync())
-        {
-            var messages = await queueClient.ReceiveMessagesAsync(1);
-            if (messages.Value.Length > 0)
-            {
-                string base64Message = messages.Value[0].MessageText;
-                try
-                {
-                    byte[] data = Convert.FromBase64String(base64Message);
-                    reflectedBlobMessage = Encoding.UTF8.GetString(data);
-                }
-                catch (FormatException)
-                {
-                    // Not a Base64 string, use as-is
-                    reflectedBlobMessage = base64Message;
-                }
-            }
-            else
-            {
-                reflectedBlobMessage = Constants.NoMessagesInQueueMessage; // "No messages in the queue.";
-            }
-        }
-        else
-        {
-            reflectedBlobMessage = "Queue does not exist.";
-        }
-
-    }
-
+       
     public void Dispose()
-    {
-        timer?.Dispose();
+    { 
     }
 }

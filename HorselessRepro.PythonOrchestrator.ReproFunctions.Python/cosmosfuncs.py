@@ -4,30 +4,40 @@ from azure.cosmos import CosmosClient, PartitionKey
 from azure.storage.blob import BlobServiceClient
 from datetime import datetime
 import os
+from todoitem import ToDoItem
+import json
 
 bp = func.Blueprint() 
-@bp.function_name(name="CosmosDBTrigger")
-
+@bp.function_name(name="CosmosDBTrigger") 
 @bp.cosmos_db_trigger(arg_name="documents", 
                        connection="cosmosdb",
                        database_name="reprodb", 
                        container_name="entries", 
                        lease_container_name="leases",
                        create_lease_container_if_not_exists="true")
-def cosmos_db_triggered(documents: func.DocumentList) -> None:
+@bp.cosmos_db_output(arg_name="savedDocuments", 
+                      database_name="reprodb",
+                      container_name="pyentries",
+                      lease_container_name="leases",
+                      create_if_not_exists=True,
+                      connection="cosmosdb")     
+def cosmos_db_triggered(documents: func.DocumentList, savedDocuments: func.Out[func.Document]) -> None:
     if documents:
-        logging.info('Document id: %s', documents[0]['id'])
-        # Initialize Cosmos client
-        endpoint = os.getenv("COSMOS_DB_ENDPOINT")
-        key = os.getenv("COSMOS_DB_KEY")
-        client = CosmosClient(endpoint, key)
-        database_name = "reprodb"
-        container_name = "pyentries"
-        database = client.get_database_client(database_name)
-        container = database.get_container_client(container_name)
-        # Write all input documents to the output collection
+        output_docs = []
         for doc in documents:
-            container.upsert_item(doc.to_json()) 
+            try:
+                doc_dict = dict(doc)
+                todo = ToDoItem(**doc_dict)
+                logging.info(f"not skipping todo document: {todo.Description}")
+                output_docs.append(todo)
+            except Exception as e:
+                logging.info(f"Skipping non-TodoItem document: {doc}, reason: {e}")
+        if output_docs:
+            outItem = output_docs[0]
+            now = datetime.utcnow().isoformat()
+            outItem.Description = f"python cosmosdb trigger updated at {now}: {outItem.Description}"
+            savedDocuments.set(func.Document.from_dict(outItem.to_dict()))
+
 
 @bp.function_name(name="PythonBlobTrigger")
 @bp.blob_trigger(arg_name="myblob",
