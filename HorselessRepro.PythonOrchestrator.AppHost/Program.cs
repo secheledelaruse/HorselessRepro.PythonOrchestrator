@@ -10,8 +10,21 @@ builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadO
 var storageConnectionString = builder.AddConnectionString("AzureWebJobsStorage");
 
 #if DEFAULT_EXPERIENCE
-var storage = builder.AddAzureStorage("storage").RunAsEmulator();
+// NOTE 
+// the deployment will not completely go green with the default storage emulator dynamic ports
+var storage = builder.AddAzureStorage("storage").RunAsEmulator(
+            azurite =>
+            {
+                azurite.WithContainerRuntimeArgs("-p", $"10000:10000");
+                azurite.WithContainerRuntimeArgs("-p", $"10001:10001");
+                azurite.WithContainerRuntimeArgs("-p", $"10002:10002");
 
+            });
+
+// NOTE
+// as per above, guidance is required on how to get
+// (python containerized azure function) consumers of the storage emulator
+// to bind to the dynamic ports
 #elif HARDCODED_URIS
     var storage = builder.AddAzureStorage("storage").RunAsEmulator(
             azurite =>
@@ -73,8 +86,8 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
     .WithReference(cosmosConnection)
     .WithReference(db)
     .WithReference(storageConnectionString)
-    .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
-    .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
+    // .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
+    // .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
     .WaitFor(blobs)
     .WaitFor(cosmosConnection)
     .WaitFor(cosmos)
@@ -92,11 +105,11 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
     .WithReference(cosmosConnection)
     .WithReference(db)
     .WithReference(storageConnectionString)
-    .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
-    .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
-    .WithEnvironment("ConnectionStrings__AzureWebJobsStorage", storageUri)
-    .WithEnvironment("AzureWebJobsStorage", storageUri)
-    .WithEnvironment("ConnectionStrings:cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
+    //.WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
+    //.WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
+    //.WithEnvironment("ConnectionStrings__AzureWebJobsStorage", storageUri)
+    //.WithEnvironment("AzureWebJobsStorage", storageUri)
+    //.WithEnvironment("ConnectionStrings:cosmosdb", $"AccountEndpoint=http://{ipAddress}:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;")
     .WaitFor(blobs)
     .WaitFor(cosmosConnection)
     .WaitFor(cosmos)
@@ -109,12 +122,10 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
 var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonOrchestrator_ReproFunctions>("functions")
     .WithExternalHttpEndpoints()
     .WithReference(queues) 
+    .WithReference(blobs)
     .WithReference(cosmos)
     .WithReference(cosmosConnection)
     .WithReference(storageConnectionString)
-    //.WithEnvironment("ConnectionStrings:AzureWebjobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
-    //.WithEnvironment("cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
-    //.WithEnvironment("Values__ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
     .WithHostStorage(storage)
     .WaitFor(storage)
     .WaitFor(pythonFuncs)
