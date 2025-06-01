@@ -1,9 +1,14 @@
 import logging
 import azure.functions as func
 from cosmosfuncs import bp
+import os
 
 app = func.FunctionApp()
 app.register_functions(bp)
+ 
+print ("environment:")
+print(os.environ)
+
 
 @app.timer_trigger(schedule="*/5 * * * * *", arg_name="myTimer", run_on_startup=False,
               use_monitor=False) 

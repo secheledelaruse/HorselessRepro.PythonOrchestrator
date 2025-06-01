@@ -8,16 +8,13 @@ builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadO
 var storageConnectionString = builder.AddConnectionString("AzureWebJobsStorage");
 
 var storage = builder.AddAzureStorage("storage").RunAsEmulator(
-                     azurite =>
-                     {
+        azurite =>
+        { 
+            azurite.WithContainerRuntimeArgs("-p", $"10000:10000");
+            azurite.WithContainerRuntimeArgs("-p", $"10001:10001");
+            azurite.WithContainerRuntimeArgs("-p", $"10002:10002");
 
-                         // azurite.WithDataVolume();
-
-                         azurite.WithContainerRuntimeArgs("-p", $"10000:10000");
-                         azurite.WithContainerRuntimeArgs("-p", $"10001:10001");
-                         azurite.WithContainerRuntimeArgs("-p", $"10002:10002");
-
-                     });
+        });
 var blobs = storage.AddBlobs("blobs");
 var queues = storage.AddQueues("queues");
 
@@ -65,11 +62,14 @@ var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_A
 var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro.PythonOrchestrator.ReproFunctions.Python")
     .WithReference(blobs) 
     .WithReference(cosmos)
+    .WithReference(cosmosConnection)
+    .WithReference(db)
+    .WithReference(storageConnectionString)
     .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
     .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
-    .WithEnvironment("ConnectionStrings__AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
-    .WithEnvironment("AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
-    .WithEnvironment("ConnectionStrings:cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
+    //.WithEnvironment("ConnectionStrings__AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
+    //.WithEnvironment("AzureWebJobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
+    //.WithEnvironment("ConnectionStrings:cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
     .WaitFor(blobs)
     .WaitFor(cosmosConnection)
     .WaitFor(cosmos)
