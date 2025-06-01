@@ -1,5 +1,5 @@
-#define DEFAULT_EXPERIENCE
-// #define HARDCODED_URIS
+// #define DEFAULT_EXPERIENCE
+#define HARDCODED_URIS
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
 
@@ -9,14 +9,20 @@ builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadO
 
 var storageConnectionString = builder.AddConnectionString("AzureWebJobsStorage");
 
-var storage = builder.AddAzureStorage("storage").RunAsEmulator(
-        azurite =>
-        { 
-            azurite.WithContainerRuntimeArgs("-p", $"10000:10000");
-            azurite.WithContainerRuntimeArgs("-p", $"10001:10001");
-            azurite.WithContainerRuntimeArgs("-p", $"10002:10002");
+#if DEFAULT_EXPERIENCE
+var storage = builder.AddAzureStorage("storage").RunAsEmulator();
 
-        });
+#elif HARDCODED_URIS
+    var storage = builder.AddAzureStorage("storage").RunAsEmulator(
+            azurite =>
+            { 
+                azurite.WithContainerRuntimeArgs("-p", $"10000:10000");
+                azurite.WithContainerRuntimeArgs("-p", $"10001:10001");
+                azurite.WithContainerRuntimeArgs("-p", $"10002:10002");
+
+            });
+#endif
+
 var blobs = storage.AddBlobs("blobs");
 var queues = storage.AddQueues("queues");
 
@@ -54,10 +60,7 @@ var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Mode
 
 var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_ApiService>("apiservice")
     .WithReference(cosmos)
-    .WithReference(cosmosConnection)
-    .WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
-    .WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
-    .WithEnvironment("ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
+    .WithReference(cosmosConnection) 
     .WaitFor(storage)
     .WaitFor(initPod);
 
@@ -108,6 +111,7 @@ var functions = builder.AddAzureFunctionsProject<Projects.HorselessRepro_PythonO
     .WithReference(queues) 
     .WithReference(cosmos)
     .WithReference(cosmosConnection)
+    .WithReference(storageConnectionString)
     //.WithEnvironment("ConnectionStrings:AzureWebjobsStorage", builder.Configuration["ConnectionStrings__AzureWebJobsStorage"])
     //.WithEnvironment("cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
     //.WithEnvironment("Values__ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
