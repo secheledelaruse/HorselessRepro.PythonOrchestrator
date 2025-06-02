@@ -86,6 +86,7 @@ var pythonFuncs = builder.AddDockerfile("repro-python-funcs", "../HorselessRepro
     .WaitFor(cosmos)
     .WaitForCompletion(initPod);
 
+
 #elif HARDCODED_URIS
 
 var ipAddress = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
