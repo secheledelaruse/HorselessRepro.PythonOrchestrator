@@ -43,53 +43,52 @@
             </g>
             <!-- Python Blob Trigger Node -->
             <g>
-                <rect x="740" y="60" width="250" height="120" rx="20" fill="#8e24aa" />
+                <rect x="740" y="60" width="250" height="@nodeRectHeight" rx="20" fill="#8e24aa" />
                 <text x="865" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Python Blob Trigger</text>
-                <foreignObject x="755" y="120" width="220" height="50">
-                    <div class="node-message">python function will read blob update content and write new blob</div>
+                <foreignObject x="755" y="120" width="220" height="@nodeForeignObjectHeight">
+                    <div class="node-message node-message-scrollable">
+                        python function will read blob update content and write new blob
+                    </div>
                 </foreignObject>
             </g>
             <!-- Python Blob Storage Node -->
             <g>
-                <rect x="1140" y="60" width="250" height="120" rx="20" fill="#388e3c" />
-                <text x="1265" y="95" fill="white" text-anchor="middle" font-size="18" font-weight="bold">python blob storage</text>
-                <foreignObject x="1155" y="120" width="220" height="50">
+                <rect x="1140" y="@pythonBlobRectY" width="250" height="@nodeRectHeight" rx="20" fill="#388e3c" />
+                <text x="1265" y="@pythonBlobTextY" fill="white" text-anchor="middle" font-size="18" font-weight="bold">python blob storage</text>
+                <foreignObject x="1155" y="@pythonBlobForeignObjectY" width="220" height="@nodeForeignObjectHeight">
                     <div class="node-message node-message-scrollable">@pythonBlobMessage</div>
                 </foreignObject>
             </g>
             <!-- Queue Node -->
             <g>
-                <rect x="340" y="400" width="250" height="120" rx="20" fill="#fbc02d" />
-                <text x="465" y="435" fill="black" text-anchor="middle" font-size="18" font-weight="bold">Queue</text>
-                <foreignObject x="355" y="460" width="220" height="50">
-                    <div class="node-message queue">@queueItems</div>
+                <rect x="340" y="400" width="250" height="@nodeRectHeight" rx="20" fill="#fbc02d" />
+                <text x="465" y="@queueTextY" fill="black" text-anchor="middle" font-size="18" font-weight="bold">Queue</text>
+                <foreignObject x="355" y="@queueForeignObjectY" width="220" height="@nodeForeignObjectHeight">
+                    <div class="node-message node-message-scrollable queue">@queueItems</div>
                 </foreignObject>
             </g>
             <!-- Queue Trigger Node -->
             <g>
-                <rect x="640" y="400" width="250" height="120" rx="20" fill="#8e24aa" />
-                <text x="765" y="435" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Queue Trigger</text>
-                <foreignObject x="655" y="460" width="220" height="50">
-                    <div class="node-message">@queueTriggerMessage</div>
+                <rect x="640" y="400" width="250" height="@nodeRectHeight" rx="20" fill="#8e24aa" />
+                <text x="765" y="@queueTriggerTextY" fill="white" text-anchor="middle" font-size="18" font-weight="bold">Queue Trigger</text>
+                <foreignObject x="655" y="@queueTriggerForeignObjectY" width="220" height="@nodeForeignObjectHeight">
+                    <div class="node-message node-message-scrollable">@queueTriggerMessage</div>
                 </foreignObject>
             </g>
             <!-- CosmosDB Node -->
             <g>
-                <rect x="1100" y="250" width="250" height="120" rx="20" fill="#d32f2f" />
-                <text x="1225" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">CosmosDB</text>
-                <foreignObject x="1115" y="300" width="220" height="50">
-                    <div class="node-message">@cosmosDbMessage</div>
+                <rect x="1100" y="400" width="250" height="@nodeRectHeight" rx="20" fill="#d32f2f" />
+                <text x="1225" y="@cosmosDbTextY" fill="white" text-anchor="middle" font-size="18" font-weight="bold">CosmosDB</text>
+                <foreignObject x="1115" y="@cosmosDbForeignObjectY" width="220" height="@nodeForeignObjectHeight">
+                    <div class="node-message node-message-scrollable">@cosmosDbMessage</div>
                 </foreignObject>
             </g>
             <!-- PythonCosmos Node -->
             <g>
-                <rect x="1400" y="250" width="200" 
-                      fill="#b71c1c"
-                      rx="20"
-                      height="@pythonCosmosRectHeight" />
-                <text x="1500" y="285" fill="white" text-anchor="middle" font-size="18" font-weight="bold">PythonCosmos</text>
-                <foreignObject x="1415" y="300" width="170" height="@pythonCosmosForeignObjectHeight">
-                    <div class="node-message">@pythonCosmosMessage</div>
+                <rect x="1400" y="400" width="200" height="@nodeRectHeight" fill="#b71c1c" rx="20" />
+                <text x="1500" y="@pythonCosmosTextY" fill="white" text-anchor="middle" font-size="18" font-weight="bold">PythonCosmos</text>
+                <foreignObject x="1415" y="@pythonCosmosForeignObjectY" width="170" height="@nodeForeignObjectHeight">
+                    <div class="node-message node-message-scrollable">@pythonCosmosMessage</div>
                 </foreignObject>
             </g>
 
@@ -106,9 +105,9 @@
                 <!-- Queue -> QueueTrigger -->
                 <line x1="590" y1="460" x2="640" y2="460" class="animated-edge" />
                 <!-- QueueTrigger -> CosmosDB -->
-                <line x1="890" y1="460" x2="1100" y2="310" class="animated-edge" />
+                <line x1="890" y1="460" x2="1100" y2="460" class="animated-edge" />
                 <!-- CosmosDB -> PythonCosmos -->
-                <line x1="1350" y1="310" x2="1400" y2="310" class="animated-edge" />
+                <line x1="1350" y1="460" x2="1400" y2="460" class="animated-edge" />
             </g>
         </g>
     </svg>
@@ -137,8 +136,29 @@
     private string panXpx => $"{panX}px";
     private string panYpx => $"{panY}px";
 
-    private double pythonCosmosRectHeight => 120; // Default height for PythonCosmos rectangle
-    private double pythonCosmosForeignObjectHeight => 50; // Default height for PythonCosmos foreignObject
+    private const int nodeHeaderHeight = 35;
+    private const int nodeContentLineHeight = 22;
+    private const int nodeContentLines = 3;
+    private const int nodeContentPadding = 15;
+    private const int nodeForeignObjectHeight = nodeContentLines * nodeContentLineHeight + nodeContentPadding; // 81px
+    private const int nodeRectHeight = nodeHeaderHeight + nodeForeignObjectHeight + 35; // was +20, now +35 for +15px
+
+    // Y positions for text and foreignObject for all nodes
+    private int pythonBlobRectY => 60;
+    private int pythonBlobTextY => pythonBlobRectY + nodeHeaderHeight;
+    private int pythonBlobForeignObjectY => pythonBlobRectY + nodeHeaderHeight + 5;
+
+    private int cosmosDbTextY => 435;
+    private int cosmosDbForeignObjectY => cosmosDbTextY + 5;
+
+    private int pythonCosmosTextY => 435;
+    private int pythonCosmosForeignObjectY => pythonCosmosTextY + 5;
+
+    private int queueTextY => 435;
+    private int queueForeignObjectY => queueTextY + 5;
+
+    private int queueTriggerTextY => 435;
+    private int queueTriggerForeignObjectY => queueTriggerTextY + 5;
 
     protected override void OnInitialized()
     {
