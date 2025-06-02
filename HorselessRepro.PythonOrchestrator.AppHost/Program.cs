@@ -1,6 +1,6 @@
-// #define DEFAULT_EXPERIENCE
-#define CUSTOMIZED_STORAGE_EMULATOR
-#define HARDCODED_URIS
+#define DEFAULT_EXPERIENCE // note - python funcs will fail to start
+// #define CUSTOMIZED_STORAGE_EMULATOR
+// #define HARDCODED_URIS
 
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +54,7 @@ var pythonFuncsContainer = db.AddContainer("pyentries", "/PartitionKey");
 var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Models_InitPod>("initpod") 
     .WithReference(cosmos) 
     .WithReference(blobs)
+    .WithReference(queues)
     .WithReference(storageConnectionString)
     .WithReference(db)
     .WaitFor(storage)
@@ -64,10 +65,9 @@ var initPod = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_Mode
 
 var apiService = builder.AddProject<Projects.HorselessRepro_PythonOrchestrator_ApiService>("apiservice")
     .WithReference(cosmos)
-    .WithReference(cosmosConnection)
-    //.WithEnvironment("COSMOS_DB_ENDPOINT", builder.Configuration["CosmosEndpointConfig__AccountEndpoint"])
-    //.WithEnvironment("COSMOS_DB_KEY", builder.Configuration["CosmosEndpointConfig__AccountKey"])
-    //.WithEnvironment("ConnectionStrings__cosmosdb", builder.Configuration["CosmosEndpointConfig__cosmosdb"])
+    .WithReference(cosmosConnection) 
+    .WithReference(blobs)
+    .WithReference(queues)
     .WaitFor(storage)
     .WaitFor(initPod);
 

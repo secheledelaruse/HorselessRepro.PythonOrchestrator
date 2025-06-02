@@ -7,8 +7,8 @@ builder.Configuration.AddJsonFile("local.settings.json", optional: true, reloadO
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 builder.AddAzureBlobClient("blobs");
-builder.AddAzureQueueClient("AzureWebJobsStorage");
-builder.AddAzureCosmosClient(connectionName: "reprodb");
+builder.AddAzureQueueClient("queues");
+builder.AddAzureCosmosClient("reprodb");
 
 builder.Services.AddCosmosChangeFeedService();
 

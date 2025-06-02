@@ -17,7 +17,7 @@ namespace HorselessRepro.PythonOrchestrator.Models.InitPod
 
             builder.AddServiceDefaults();
             builder.AddAzureCosmosClient(connectionName: "reprodb");
-            builder.AddAzureBlobClient(connectionName: "AzureWebJobsStorage"); 
+            builder.AddAzureBlobClient(connectionName: "blobs"); 
 
             var host = builder.Build();
 
