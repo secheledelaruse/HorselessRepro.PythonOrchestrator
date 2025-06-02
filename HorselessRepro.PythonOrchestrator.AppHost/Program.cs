@@ -1,6 +1,6 @@
-#define DEFAULT_EXPERIENCE // note - python funcs will fail to start
-// #define CUSTOMIZED_STORAGE_EMULATOR
-// #define HARDCODED_URIS
+// #define DEFAULT_EXPERIENCE // note - python funcs will fail to start
+#define CUSTOMIZED_STORAGE_EMULATOR
+#define HARDCODED_URIS
 
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
